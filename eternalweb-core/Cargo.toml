@@ -1,0 +1,89 @@
+[package]
+name = "eternalweb-core"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Core library for EternalWeb - Decentralized web archiving platform"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Workspace dependencies
+tokio = { workspace = true }
+async-trait = { workspace = true }
+libp2p = { workspace = true }
+libp2p-webrtc = { workspace = true }
+rust-ipfs = { workspace = true }
+cid = { workspace = true }
+multihash = { workspace = true }
+hypercore = { workspace = true }
+hypercore-protocol = { workspace = true }
+ring = { workspace = true }
+kyber = { workspace = true }
+dilithium = { workspace = true }
+ed25519-dalek = { workspace = true }
+x25519-dalek = { workspace = true }
+zeroize = { workspace = true }
+ark-std = { workspace = true }
+ark-ff = { workspace = true }
+ark-ec = { workspace = true }
+sled = { workspace = true }
+tantivy = { workspace = true }
+sophia = { workspace = true }
+tract-onnx = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+bincode = { workspace = true }
+rmp-serde = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+axum = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+wasm-bindgen = { workspace = true }
+wasm-bindgen-futures = { workspace = true }
+js-sys = { workspace = true }
+web-sys = { workspace = true }
+sp-core = { workspace = true }
+sp-runtime = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+url = { workspace = true }
+bytes = { workspace = true }
+futures = { workspace = true }
+parking_lot = { workspace = true }
+dashmap = { workspace = true }
+
+# Additional specific dependencies
+reqwest = { version = "0.11", features = ["json", "gzip"] }
+scraper = "0.18"
+mime = "0.3"
+blake3 = "1.5"
+
+[dev-dependencies]
+proptest = { workspace = true }
+criterion = { workspace = true }
+mockall = { workspace = true }
+tempfile = "3.8"
+
+[features]
+default = ["full"]
+full = ["archiving", "networking", "security", "search", "blockchain", "ai", "collaboration", "incentives"]
+archiving = []
+networking = []
+security = []
+search = []
+blockchain = []
+ai = []
+collaboration = []
+incentives = []
+wasm = ["wasm-bindgen"]
+
+[[bench]]
+name = "benchmarks"
+harness = false
