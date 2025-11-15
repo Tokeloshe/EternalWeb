@@ -13,7 +13,7 @@ pub async fn discover_via_ens(domain: &str) -> Result<Vec<Multiaddr>> {
 }
 
 /// DHT-based peer discovery
-pub async fn discover_via_dht(topic: &str, swarm: &mut Swarm<EternalWebBehaviour>) -> Result<Vec<PeerId>> {
+pub async fn discover_via_dht(topic: &str) -> Result<Vec<PeerId>> {
     tracing::info!("Discovering peers via DHT for topic: {}", topic);
 
     // TODO: Use Kademlia to find peers interested in topic

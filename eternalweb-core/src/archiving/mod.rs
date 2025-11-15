@@ -352,7 +352,7 @@ async fn extract_metadata(content: &[u8], url: &str) -> Result<SnapshotMetadata>
 }
 
 fn generate_cid(content: &[u8]) -> Result<Cid> {
-    use multihash::{Code, MultihashDigest};
+    use multihash_codetable::{Code, MultihashDigest};
 
     // Use BLAKE3 for hashing (fast and secure)
     let hash = blake3::hash(content);

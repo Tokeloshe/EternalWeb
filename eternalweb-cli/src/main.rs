@@ -225,7 +225,7 @@ async fn node_command(action: NodeAction) -> anyhow::Result<()> {
             let _swarm = networking::bootstrap_network().await?;
 
             println!("{}", "✓ Node started successfully!".green());
-            println!("{}", "Press Ctrl+C to stop...".dim());
+            println!("{}", "Press Ctrl+C to stop...".bright_black());
 
             // Keep running
             tokio::signal::ctrl_c().await?;
@@ -289,7 +289,7 @@ fn keygen_command(key_type: String) -> anyhow::Result<()> {
     println!();
     println!("{}", "✓ Keypair generated!".green());
     println!("{} {}", "Public key:".yellow(), hex::encode(&public_key.bytes));
-    println!("{}", "Private key saved securely".dim());
+    println!("{}", "Private key saved securely".bright_black());
 
     Ok(())
 }

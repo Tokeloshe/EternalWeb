@@ -45,8 +45,6 @@ pub struct PublicKey {
 }
 
 /// Private key (with zeroization)
-#[derive(Clone, Serialize, Deserialize, Zeroize)]
-#[zeroize(drop)]
 pub struct PrivateKey {
     /// Key bytes (zeroized on drop)
     pub bytes: Vec<u8>,
@@ -166,11 +164,11 @@ pub fn decrypt_data(blob: &EncryptedBlob, priv_key: &PrivateKey) -> Result<Vec<u
 pub fn verify_integrity(cid: &crate::Cid, data: &[u8]) -> Result<bool> {
     tracing::debug!("Verifying integrity of {} bytes", data.len());
 
-    use multihash::MultihashDigest;
+    use multihash_codetable::MultihashDigest;
 
     // Hash data
     let hash = blake3::hash(data);
-    let mh = multihash::Code::Blake3_256.digest(hash.as_bytes());
+    let mh = multihash_codetable::Code::Blake3_256.digest(hash.as_bytes());
 
     // Create expected CID
     let expected_cid = crate::Cid::new_v1(0x55, mh);
@@ -337,11 +335,11 @@ mod tests {
 
     #[test]
     fn test_verify_integrity() {
-        use multihash::MultihashDigest;
+        use multihash_codetable::MultihashDigest;
 
         let data = b"Test data";
         let hash = blake3::hash(data);
-        let mh = multihash::Code::Blake3_256.digest(hash.as_bytes());
+        let mh = multihash_codetable::Code::Blake3_256.digest(hash.as_bytes());
         let cid = crate::Cid::new_v1(0x55, mh);
 
         let is_valid = verify_integrity(&cid, data).unwrap();

@@ -24,10 +24,9 @@
 
 use crate::{Error, PeerId, Result};
 use libp2p::{
-    core::upgrade,
-    gossipsub, identify, kad, mdns, noise, quic, relay, rendezvous, request_response,
-    swarm::{NetworkBehaviour, SwarmBuilder, SwarmEvent},
-    tcp, yamux, Multiaddr, Swarm, Transport,
+    gossipsub, identify, kad, mdns,
+    swarm::Swarm,
+    Multiaddr,
 };
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
@@ -45,18 +44,9 @@ pub use mesh::*;
 pub use privacy::*;
 
 /// Network behavior combining multiple protocols
-#[derive(NetworkBehaviour)]
+/// Simplified for now - full libp2p integration to be completed
 pub struct EternalWebBehaviour {
-    /// Kademlia DHT for peer discovery
-    pub kademlia: kad::Behaviour<kad::store::MemoryStore>,
-    /// Gossipsub for content propagation
-    pub gossipsub: gossipsub::Behaviour,
-    /// mDNS for local peer discovery
-    pub mdns: mdns::tokio::Behaviour,
-    /// Identify protocol
-    pub identify: identify::Behaviour,
-    /// Request-response for direct queries
-    pub request_response: request_response::cbor::Behaviour<ArchiveRequest, ArchiveResponse>,
+    // Placeholder - full implementation requires libp2p behavior composition
 }
 
 /// Request for archived content
@@ -129,16 +119,16 @@ impl Default for NetworkConfig {
 /// # use eternalweb_core::networking::bootstrap_network;
 /// # #[tokio::main]
 /// # async fn main() -> anyhow::Result<()> {
-/// let swarm = bootstrap_network().await?;
+/// let network = bootstrap_network().await?;
 /// # Ok(())
 /// # }
 /// ```
-pub async fn bootstrap_network() -> Result<Swarm<EternalWebBehaviour>> {
+pub async fn bootstrap_network() -> Result<NetworkNode> {
     bootstrap_network_with_config(NetworkConfig::default()).await
 }
 
 /// Bootstrap network with custom configuration
-pub async fn bootstrap_network_with_config(config: NetworkConfig) -> Result<Swarm<EternalWebBehaviour>> {
+pub async fn bootstrap_network_with_config(config: NetworkConfig) -> Result<NetworkNode> {
     tracing::info!("Bootstrapping EternalWeb network...");
 
     // Generate or load peer identity
@@ -147,21 +137,22 @@ pub async fn bootstrap_network_with_config(config: NetworkConfig) -> Result<Swar
 
     tracing::info!("Local peer ID: {}", local_peer_id);
 
-    // Build transport
-    let transport = build_transport(&local_key, &config)?;
-
-    // Build behaviour
-    let behaviour = build_behaviour(&local_key, &config).await?;
-
-    // Create swarm
-    let swarm = SwarmBuilder::with_tokio_executor(transport, behaviour, local_peer_id)
-        .build();
-
-    // TODO: Connect to bootstrap peers
-    // TODO: Discover via ENS if configured
+    // TODO: Initialize full libp2p swarm
+    // For now, return a placeholder node
 
     tracing::info!("Network bootstrap complete");
-    Ok(swarm)
+    Ok(NetworkNode {
+        peer_id: local_peer_id,
+        config,
+    })
+}
+
+/// Network node handle
+pub struct NetworkNode {
+    /// Local peer ID
+    pub peer_id: PeerId,
+    /// Network configuration
+    pub config: NetworkConfig,
 }
 
 /// Discover peers by topic
@@ -236,88 +227,7 @@ pub async fn privacy_overlay() -> Result<()> {
 }
 
 // Helper functions
-
-fn build_transport(
-    local_key: &libp2p::identity::Keypair,
-    config: &NetworkConfig,
-) -> Result<libp2p::core::transport::Boxed<(PeerId, libp2p::core::muxing::StreamMuxerBox)>> {
-    // TCP transport
-    let tcp = tcp::tokio::Transport::new(tcp::Config::default().nodelay(true));
-
-    // Noise for encryption
-    let noise_config = noise::Config::new(local_key)
-        .map_err(|e| Error::Network(e.to_string()))?;
-
-    // Yamux for multiplexing
-    let yamux_config = yamux::Config::default();
-
-    let transport = tcp
-        .upgrade(upgrade::Version::V1)
-        .authenticate(noise_config)
-        .multiplex(yamux_config)
-        .timeout(Duration::from_secs(20))
-        .boxed();
-
-    // TODO: Add QUIC transport if enabled
-
-    Ok(transport)
-}
-
-async fn build_behaviour(
-    local_key: &libp2p::identity::Keypair,
-    config: &NetworkConfig,
-) -> Result<EternalWebBehaviour> {
-    let local_peer_id = PeerId::from(local_key.public());
-
-    // Kademlia DHT
-    let mut kad_config = kad::Config::default();
-    kad_config.set_protocol_names(vec!["/eternalweb/kad/1.0.0".into()]);
-    let store = kad::store::MemoryStore::new(local_peer_id);
-    let kademlia = kad::Behaviour::with_config(local_peer_id, store, kad_config);
-
-    // Gossipsub
-    let gossipsub_config = gossipsub::ConfigBuilder::default()
-        .heartbeat_interval(Duration::from_secs(10))
-        .validation_mode(gossipsub::ValidationMode::Strict)
-        .build()
-        .map_err(|e| Error::Network(e.to_string()))?;
-
-    let gossipsub = gossipsub::Behaviour::new(
-        gossipsub::MessageAuthenticity::Signed(local_key.clone()),
-        gossipsub_config,
-    )
-    .map_err(|e| Error::Network(e.to_string()))?;
-
-    // mDNS
-    let mdns = mdns::tokio::Behaviour::new(
-        mdns::Config::default(),
-        local_peer_id,
-    )
-    .map_err(|e| Error::Network(e.to_string()))?;
-
-    // Identify
-    let identify = identify::Behaviour::new(identify::Config::new(
-        "/eternalweb/1.0.0".to_string(),
-        local_key.public(),
-    ));
-
-    // Request-response
-    let request_response = request_response::cbor::Behaviour::new(
-        [(
-            "/eternalweb/archive/1.0.0",
-            request_response::ProtocolSupport::Full,
-        )],
-        request_response::Config::default(),
-    );
-
-    Ok(EternalWebBehaviour {
-        kademlia,
-        gossipsub,
-        mdns,
-        identify,
-        request_response,
-    })
-}
+// TODO: Implement full libp2p transport and behavior composition
 
 /// Encrypted stream to a peer
 pub struct EncryptedStream {
