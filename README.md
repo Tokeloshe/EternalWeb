@@ -7,6 +7,14 @@
 
 EternalWeb is a decentralized, peer-to-peer web archiving and sharing platform designed to reclaim the internet for humankind. By empowering users to preserve, share, and discover content without corporate or governmental gatekeepers, it makes the web more free, egalitarian, and resilient. Built with future-proof technologies for Web 3.0 (decentralization, blockchain) and Web 4.0 (AI intelligence, autonomy), EternalWeb operates primarily on the clearnet for transparency and accessibility, while offering optional privacy features for censored regions. It's not just another darkweb tool—it's a positive force for global knowledge preservation, education, and collaboration.
 
+<p align="center">
+  <img src="docs/media/eternalweb.svg" width="100%"
+       alt="Animation: a county flood-gauge page changes and then returns 404 at the same URL. EternalWeb names it by a BLAKE3 content address instead, which changes completely when one character changes and rejects edited bytes. An archivist's Ed25519 signature verifies for the address and fails on the edited page. Each version keeps its own address, so the March readings survive the removal. Peer replication is shown as the roadmap design, followed by reputation and curation scores and a list of what works today and what is next.">
+  <br>
+  <sub>Addresses, signatures and scores are computed by <code>eternalweb-core</code> (<code>cargo run -p eternalweb-core --release --example film</code>).
+  <a href="https://tokeloshe.github.io/EternalWeb/">Open the interactive version</a> to pause, scrub and jump between chapters.</sub>
+</p>
+
 Inspired by IPFS, Hypercore, and emerging standards, EternalWeb turns every user into a node in a distributed network, ensuring data immortality against link rot, censorship, and profit-driven erasure. Licensed under AGPL-3.0 to keep it forever open and community-owned.
 
 ## Table of Contents

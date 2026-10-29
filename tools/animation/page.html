@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EternalWeb · Name what you keep by what it is</title>
+<meta name="description" content="EternalWeb archives web pages by content address instead of location: a BLAKE3 fingerprint that changes when the content changes, signed by whoever kept it.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="EternalWeb · Name what you keep by what it is">
+<meta property="og:description" content="A URL names a place. EternalWeb names the thing: content-addressed, signed, versioned archives.">
+<meta property="og:url" content="https://tokeloshe.github.io/EternalWeb/">
+<meta property="og:image" content="https://tokeloshe.github.io/EternalWeb/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tokeloshe.github.io/EternalWeb/og.png">
+<style>
+:root{--bg:#080B11;--ink:#EEF2F7;--body:#C8D1DE;--dim:#8792A7;--line:#1F2735;--panel:#0E141F;--gold:#5EEAD4;--teal:#3FD0B6;--violet:#A78BFA;--blue:#6CA8FF;--rose:#FF6B7A;--green:#5EE6A0;--amber:#FFB547}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 ui-sans-serif,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
+code{font:0.88em ui-monospace,"SF Mono",Menlo,Consolas,monospace;background:#121A27;border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:#DCE6F2}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.mark{letter-spacing:.34em;font-weight:600;font-size:13px}
+nav a{color:var(--dim);font-size:13px;margin-left:22px;letter-spacing:.06em}
+.hero{margin:28px 0 26px}
+h1{font-weight:300;font-size:clamp(30px,4.6vw,52px);line-height:1.12;letter-spacing:.01em;margin:0 0 12px}
+.sub{color:var(--dim);font-size:clamp(16px,1.6vw,19px);max-width:780px;margin:0}
+.stage{position:relative;border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px var(--line)}
+.stage svg{display:block;width:100%;height:auto}
+.bar{display:flex;align-items:center;gap:14px;margin:14px 0 6px}
+button{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;height:36px;min-width:36px;padding:0 14px;font:inherit;font-size:13px;cursor:pointer;letter-spacing:.04em}
+button:hover{border-color:var(--dim)}
+button.on{border-color:var(--gold);color:var(--gold)}
+input[type=range]{flex:1;accent-color:var(--gold);min-width:80px}
+.time{font:12px ui-monospace,Menlo,Consolas,monospace;color:var(--dim);width:92px;text-align:right}
+.chapters{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px}
+.chapters button{color:var(--dim)}
+.small{color:var(--dim);font-size:13px;margin:0}
+article{max-width:740px;margin:56px auto 0;color:var(--body)}
+article h2{color:var(--ink);font-weight:500;font-size:24px;letter-spacing:.01em;margin:56px 0 10px}
+article h2 .n{color:var(--dim);font:500 12px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.2em;display:block;margin-bottom:6px}
+article p{margin:0 0 18px}
+article strong{color:var(--ink);font-weight:600}
+article ul,article ol{padding-left:22px;margin:0 0 18px}
+article li{margin:5px 0}
+.rules{list-style:none;padding:0;margin:8px 0 22px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.rules li{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:14px 16px;margin:0;border-top:1px solid var(--line);background:var(--panel)}
+.rules li:first-child{border-top:0}
+.rules b{font:700 13px ui-monospace,Menlo,Consolas,monospace;color:var(--gold);padding-top:2px}
+.split{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 22px}
+.split div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel)}
+.split b{display:block;font-weight:300;font-size:28px;line-height:1.2}
+.split span{color:var(--dim);font-size:13px}
+table{width:100%;border-collapse:collapse;margin:0 0 22px;font-size:14.5px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:500;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+td:first-child{color:var(--ink)}
+.state{display:inline-block;border-radius:999px;padding:1px 10px;font:600 12px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font:12.5px/1.6 ui-monospace,Menlo,Consolas,monospace;color:#D4DEEA;margin:0 0 20px}
+.k{color:var(--dim)}
+.note{border-left:3px solid var(--gold);background:var(--panel);border-radius:0 10px 10px 0;padding:14px 18px;margin:0 0 20px;font-size:15px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 24px}
+.cta a{border:1px solid var(--line);border-radius:999px;padding:8px 16px;color:var(--ink);font-size:14px}
+.cta a.primary{border-color:var(--gold);color:var(--gold)}
+.cta a:hover{text-decoration:none;border-color:var(--dim)}
+footer{color:var(--dim);font-size:13px;padding:48px 0 60px;border-top:1px solid var(--line);margin-top:72px}
+@media (max-width:640px){nav{display:none}.time{width:70px}article h2{font-size:21px}.split{grid-template-columns:repeat(2,1fr)}table{font-size:13px}th,td{padding:9px 6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="mark">ETERNALWEB</div>
+<nav><a href="https://github.com/Tokeloshe/EternalWeb">GitHub</a><a href="#today">What works today</a><a href="https://github.com/Tokeloshe/EternalWeb/blob/main/docs/ARCHITECTURE.md">Architecture</a></nav></header>
+
+<div class="hero">
+<h1>Name what you keep by what it is, not where it lives.</h1>
+<p class="sub">A URL names a place, and places change. EternalWeb archives pages by a fingerprint of their content: an address that can only ever mean those exact bytes, signed by whoever kept them.</p>
+</div>
+
+<div class="stage">{{SVG}}</div>
+<div class="bar">
+<button id="play" aria-label="Pause">Pause</button>
+<input id="scrub" type="range" min="0" max="{{T}}" step="0.01" value="0" aria-label="Scrub timeline">
+<span class="time" id="time">0.0 s</span>
+<button id="slow" aria-pressed="false">0.5×</button>
+</div>
+<div class="chapters">
+{{CHAPTERS}}
+</div>
+<p class="small">The addresses, signatures, reputation and curation scores in the film are computed by <code>eternalweb-core</code> (<code>cargo run -p eternalweb-core --release --example film</code>). The network act is the roadmap design and is labelled as such.</p>
+
+<article>
+
+<h2><span class="n">01</span>Link rot</h2>
+<p>A link is a promise that something will be at a place. Pages get edited, moved, quietly trimmed, or taken down, and the URL keeps pointing at whatever is there now, or at nothing. The record of what the page said is the first thing lost.</p>
+
+<h2><span class="n">02</span>An address made of the content</h2>
+<p>EternalWeb hashes the bytes of what it archives with BLAKE3 and wraps the result as a CIDv1 content identifier. The address of the March version of the page in the film is:</p>
+<pre>{{CID}}</pre>
+<p>Change one character, <code>4.82 m</code> to <code>4.83 m</code>, and almost every character of the address changes. Checking works the other way round: <code>verify_integrity(address, bytes)</code> recomputes the fingerprint, so the original bytes match and edited bytes are rejected. Anyone holding a copy can prove it is the copy.</p>
+
+<h2><span class="n">03</span>Signed by whoever kept it</h2>
+<p>An archivist signs the address with an Ed25519 key. The signature verifies for that address and fails for any other, including the edited page's. Trust attaches to people and their keys, not to whichever server happens to answer.</p>
+
+<h2><span class="n">04</span>A removal is a new version</h2>
+<p>When the page changes, the new content gets a new address and joins the feed as a new version. The old version keeps its own address. Taking the data off the county's site doesn't touch the March archive: its address still returns the March readings, byte for byte.</p>
+
+<h2><span class="n">05</span>Every reader a keeper (the design)</h2>
+<p>The design is a peer-to-peer network where archives replicate across the nodes of the people who read them, so no single server decides what survives, and a request for an address is answered by the nearest peer that holds it. <strong>This is not built yet.</strong> The networking layer (libp2p replication, discovery, mesh) is scaffolded but stubbed; today an archive lives in the local store of the node that made it.</p>
+
+<h2><span class="n">06</span>Reputation, not tokens</h2>
+<p>Archiving, hosting, curating and development earn reputation points, with levels from Newcomer through Contributor, Guardian and Sentinel to Eternal. Community curation scores each archive as upvotes over all votes, with flags tracked separately. There's no speculative coin.</p>
+
+<h2 id="today"><span class="n">07</span>What works today, and what's next</h2>
+<table>
+<tr><th>Working today</th><th>On the roadmap</th></tr>
+<tr><td>Content-addressed archiving (BLAKE3, CIDv1)</td><td>Peer-to-peer replication (libp2p)</td></tr>
+<tr><td>Integrity checks against the address</td><td>Semantic search</td></tr>
+<tr><td>Ed25519 signatures</td><td>Post-quantum keys and signatures</td></tr>
+<tr><td>Versioned feeds</td><td>End-to-end encrypted sharing</td></tr>
+<tr><td>Reputation levels and curation scores</td><td>Governance anchoring</td></tr>
+<tr><td>Command-line tool</td><td>Browser extension and apps</td></tr>
+</table>
+<p>{{TESTS}} tests pass with <code>cargo test</code>.</p>
+
+<h2><span class="n">08</span>Try it</h2>
+<pre><span class="k">$ git clone https://github.com/Tokeloshe/EternalWeb.git &amp;&amp; cd EternalWeb</span>
+<span class="k">$ cargo build --release</span>
+<span class="k">$ ./target/release/eternalweb archive https://example.com --public</span>
+<span class="k">$ cargo run -p eternalweb-core --release --example film</span>     # the scenario in the film</pre>
+
+<h2><span class="n">09</span>Help build it</h2>
+<p>The archive core works; the network is the next big piece. Rust and libp2p contributors are the most useful help right now. AGPL-3.0, so it stays open for good.</p>
+<div class="cta">
+<a class="primary" href="https://github.com/Tokeloshe/EternalWeb">Read the code</a>
+<a href="https://github.com/Tokeloshe/EternalWeb/blob/main/CONTRIBUTING.md">Contributing</a>
+<a href="https://github.com/Tokeloshe/EternalWeb/issues">Issues</a>
+</div>
+
+</article>
+
+<footer>AGPL-3.0 · <a href="https://github.com/Tokeloshe/EternalWeb">github.com/Tokeloshe/EternalWeb</a> · <a href="https://x.com/e_honiball">@e_honiball</a></footer>
+</div>
+<script>
+(function(){
+  var T={{T}}, film=document.getElementById('film');
+  var play=document.getElementById('play'), scrub=document.getElementById('scrub'),
+      time=document.getElementById('time'), slow=document.getElementById('slow');
+  var anims=[], paused=false, rate=1, dragging=false;
+  function grab(){ try{ anims=film.getAnimations({subtree:true}); }catch(e){ anims=document.getAnimations(); } }
+  function now(){ return anims.length ? ((anims[0].currentTime||0)/1000)%T : 0; }
+  function seek(t){ anims.forEach(function(a){ a.currentTime=t*1000; }); }
+  function setPaused(p){ paused=p; anims.forEach(function(a){ a.playbackRate=p?0:rate; });
+    play.textContent=p?'Play':'Pause'; play.setAttribute('aria-label',p?'Play':'Pause'); }
+  function tick(){ if(!dragging){ var t=now(); scrub.value=t.toFixed(2); time.textContent=t.toFixed(1)+' s'; }
+    requestAnimationFrame(tick); }
+  grab();
+  if(!anims.length){ document.querySelector('.bar').style.display='none'; document.querySelector('.chapters').style.display='none'; return; }
+  play.onclick=function(){ setPaused(!paused); };
+  slow.onclick=function(){ rate=rate===1?.5:1; if(!paused) anims.forEach(function(a){ a.playbackRate=rate; });
+    slow.classList.toggle('on',rate!==1); slow.setAttribute('aria-pressed',rate!==1); };
+  scrub.addEventListener('input',function(){ dragging=true; seek(+scrub.value); time.textContent=(+scrub.value).toFixed(1)+' s'; });
+  scrub.addEventListener('change',function(){ dragging=false; });
+  document.querySelectorAll('.chapters button').forEach(function(b){ b.onclick=function(){ seek(+b.dataset.t); }; });
+  document.addEventListener('keydown',function(e){ if(e.target.tagName==='INPUT')return;
+    if(e.code==='Space'){ e.preventDefault(); setPaused(!paused); }
+    if(e.code==='ArrowRight'){ seek(Math.min(T-.01,now()+2)); }
+    if(e.code==='ArrowLeft'){ seek(Math.max(0,now()-2)); } });
+  tick();
+})();
+</script>
+</body>
+</html>
