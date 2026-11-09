@@ -4,6 +4,8 @@
 [![GitHub stars](https://img.shields.io/github/stars/Tokeloshe/EternalWeb)](https://github.com/Tokeloshe/EternalWeb/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/Tokeloshe/EternalWeb)](https://github.com/Tokeloshe/EternalWeb/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Tokeloshe/EternalWeb)](https://github.com/Tokeloshe/EternalWeb/network)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub-EA4AAA?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/Tokeloshe)
+[![Buy me a coffee](https://img.shields.io/badge/buy%20me%20a%20coffee-%245-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/Tokeloshe)
 
 EternalWeb is a decentralized, peer-to-peer web archiving and sharing platform designed to reclaim the internet for humankind. By empowering users to preserve, share, and discover content without corporate or governmental gatekeepers, it makes the web more free, egalitarian, and resilient. Built with future-proof technologies for Web 3.0 (decentralization, blockchain) and Web 4.0 (AI intelligence, autonomy), EternalWeb operates primarily on the clearnet for transparency and accessibility, while offering optional privacy features for censored regions. It's not just another darkweb tool—it's a positive force for global knowledge preservation, education, and collaboration.
 
@@ -123,6 +125,20 @@ See \`CONTRIBUTING.md\` for guidelines. Focus on ethical features; all PRs audit
 - **Long-Term**: IoT/VR support, global partnerships.
 
 Track progress in Issues or Projects tab.
+
+## Support EternalWeb
+
+EternalWeb is free, open source and built by one person in the evenings. If you want a web that cannot be quietly deleted, a coffee ($5) or a GitHub sponsorship keeps the work going.
+
+<p align="center">
+  <a href="https://github.com/sponsors/Tokeloshe"><img src="https://img.shields.io/badge/Sponsor%20on%20GitHub-EA4AAA?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor on GitHub" height="40"></a>
+  &nbsp;&nbsp;
+  <a href="https://buymeacoffee.com/Tokeloshe"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="40"></a>
+</p>
+
+<p align="center"><sub>GitHub Sponsors: two clicks if you are signed in to GitHub. Buy Me a Coffee: any card, no account needed.</sub></p>
+
+Can't right now? A star on this page or a clear bug report helps EternalWeb just as much.
 
 ## License
 This project is licensed under the GNU Affero General Public License v3.0—see the [LICENSE](LICENSE) file for details. This ensures EternalWeb remains free and open forever.
