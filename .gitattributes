@@ -1,0 +1,4 @@
+# Keep the generated site and animation pages out of the language statistics.
+site/** linguist-documentation
+tools/animation/*.html linguist-documentation
+frontend/*.html linguist-documentation
